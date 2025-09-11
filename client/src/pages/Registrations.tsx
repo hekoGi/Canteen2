@@ -12,7 +12,8 @@ const mockRegistrations = [
     amount: "125",
     representative: "Maria Hansen",
     date: "2025-09-11",
-    time: "12:30"
+    time: "12:30",
+    invoiceShipped: false
   },
   {
     id: 2,
@@ -22,7 +23,8 @@ const mockRegistrations = [
     amount: "89",
     representative: "Jens Mortensen",
     date: "2025-09-11",
-    time: "08:45"
+    time: "08:45",
+    invoiceShipped: true
   },
   {
     id: 3,
@@ -32,7 +34,8 @@ const mockRegistrations = [
     amount: "134",
     representative: "Lars Nielsen",
     date: "2025-09-10",
-    time: "13:15"
+    time: "13:15",
+    invoiceShipped: false
   }
 ];
 
