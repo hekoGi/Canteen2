@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, CheckCircle, DollarSign, User, Building } from "lucide-react";
 import { z } from "zod";
+import bakkafrostLogo from "@assets/Bakkafrost_Logo_1757593646977.png";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -64,11 +65,12 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
       )}
       <Card>
         <CardHeader className="text-center pb-6 relative">
-          <div className="absolute top-0 right-0">
+          <div className="absolute top-4 right-4">
             <img 
-              src="/bakkafrost-logo.png" 
+              src={bakkafrostLogo} 
               alt="Bakkafrost Logo" 
               className="h-16 w-auto"
+              data-testid="img-bakkafrost-logo"
             />
           </div>
           <CardTitle className="flex items-center justify-center space-x-2 text-2xl">
