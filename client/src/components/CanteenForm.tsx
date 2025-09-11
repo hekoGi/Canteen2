@@ -119,55 +119,48 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
               </div>
             </div>
 
-            {/* Meal Details Section */}
+            {/* Meal Fields */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-2 pb-2 border-b border-border">
-                <Building className="w-4 h-4 text-muted-foreground" />
-                <h3 className="font-medium text-foreground">Meal Details</h3>
+              <div className="space-y-2">
+                <Label htmlFor="meal" className="text-sm font-medium">
+                  Máltíð / Meal <span className="text-destructive">*</span>
+                </Label>
+                <Select onValueChange={(value) => form.setValue("meal", value)} defaultValue="Døgurða / Lunch">
+                  <SelectTrigger data-testid="select-meal" className={form.formState.errors.meal ? "border-destructive" : ""}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Døgurða / Lunch">Døgurða / Lunch</SelectItem>
+                    <SelectItem value="Morgunmat / Breakfast">Morgunmat / Breakfast</SelectItem>
+                  </SelectContent>
+                </Select>
+                {form.formState.errors.meal && (
+                  <p className="text-sm text-destructive" data-testid="error-meal">
+                    {form.formState.errors.meal.message}
+                  </p>
+                )}
               </div>
               
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="meal" className="text-sm font-medium">
-                    Máltíð / Meal <span className="text-destructive">*</span>
-                  </Label>
-                  <Select onValueChange={(value) => form.setValue("meal", value)} defaultValue="Døgurða / Lunch">
-                    <SelectTrigger data-testid="select-meal" className={form.formState.errors.meal ? "border-destructive" : ""}>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Døgurða / Lunch">Døgurða / Lunch</SelectItem>
-                      <SelectItem value="Morgunmat / Breakfast">Morgunmat / Breakfast</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {form.formState.errors.meal && (
-                    <p className="text-sm text-destructive" data-testid="error-meal">
-                      {form.formState.errors.meal.message}
-                    </p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="amount" className="text-sm font-medium">
-                    Mongd / Amount <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="amount"
-                    data-testid="input-amount"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    {...form.register("amount")}
-                    className={form.formState.errors.amount ? "border-destructive" : ""}
-                  />
-                  {form.formState.errors.amount && (
-                    <p className="text-sm text-destructive" data-testid="error-amount">
-                      {form.formState.errors.amount.message}
-                    </p>
-                  )}
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="amount" className="text-sm font-medium">
+                  Mongd / Amount <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="amount"
+                  data-testid="input-amount"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  {...form.register("amount")}
+                  className={form.formState.errors.amount ? "border-destructive" : ""}
+                />
+                {form.formState.errors.amount && (
+                  <p className="text-sm text-destructive" data-testid="error-amount">
+                    {form.formState.errors.amount.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -200,7 +193,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                 disabled={isSubmitting}
                 data-testid="button-reset"
               >
-                Reset Form
+                Reset
               </Button>
               <Button
                 type="submit"
@@ -214,7 +207,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                     Submitting...
                   </>
                 ) : (
-                  "Submit Entry"
+                  "OK"
                 )}
               </Button>
             </div>
