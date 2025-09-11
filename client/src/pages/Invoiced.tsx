@@ -41,7 +41,7 @@ export default function Invoiced() {
           <Card>
             <CardHeader className="text-center pb-6">
               <CardTitle className="text-2xl">
-                <span className="text-[46px]">Rekning sendt / Invoiced</span>
+                <span className="text-[46px] text-white">Rekning sendt / Invoiced</span>
               </CardTitle>
             </CardHeader>
             
