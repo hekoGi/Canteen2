@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CanteenForm from "@/components/CanteenForm";
+import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
 
 export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,7 +26,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="py-8">
+      <main className="relative py-8">
+        <div className="absolute top-2 right-2 z-10">
+          <img 
+            src={bakkafrostLogo} 
+            alt="Bakkafrost Logo" 
+            className="h-16 w-auto" 
+            data-testid="img-bakkafrost-logo" 
+          />
+        </div>
         <CanteenForm 
           onSubmit={handleFormSubmit} 
           isSubmitting={isSubmitting} 
