@@ -1,5 +1,4 @@
 import { useState } from "react";
-import CanteenHeader from "@/components/CanteenHeader";
 import CanteenForm from "@/components/CanteenForm";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -27,11 +26,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="relative">
-        <CanteenHeader />
-        <div className="absolute top-4 right-6">
-          <ThemeToggle />
-        </div>
+      <div className="absolute top-4 right-6">
+        <ThemeToggle />
       </div>
       
       <main className="py-8">

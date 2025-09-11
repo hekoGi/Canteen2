@@ -66,8 +66,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
       <Card>
         <CardHeader className="text-center pb-6">
           <CardTitle className="flex items-center justify-center space-x-2">
-            <DollarSign className="w-5 h-5 text-primary" />
-            <span>New Meal Entry</span>
+            <span>Skráseting</span>
           </CardTitle>
           <CardDescription>
             Please fill out all fields to record a meal entry in the canteen registry
