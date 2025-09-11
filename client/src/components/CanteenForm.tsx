@@ -177,6 +177,33 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
               </div>
             </div>
 
+            {/* Submit Button */}
+            <div className="flex justify-end space-x-3 pt-4 border-t border-border">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => form.reset()}
+                disabled={isSubmitting}
+                data-testid="button-reset"
+              >
+                Reset
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                data-testid="button-submit"
+                className="min-w-[120px]"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "OK"
+                )}
+              </Button>
+            </div>
           </form>
         </CardContent>
       </Card>
