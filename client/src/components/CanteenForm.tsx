@@ -91,7 +91,6 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                   <Input
                     id="name"
                     data-testid="input-name"
-                    placeholder="Enter full name"
                     {...form.register("name")}
                     className={form.formState.errors.name ? "border-destructive" : ""}
                   />
@@ -108,7 +107,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                   </Label>
                   <Select onValueChange={(value) => form.setValue("company", value)}>
                     <SelectTrigger data-testid="select-company" className={form.formState.errors.company ? "border-destructive" : ""}>
-                      <SelectValue placeholder="Select company" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Tech Corp">Tech Corp</SelectItem>
@@ -141,7 +140,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                   </Label>
                   <Select onValueChange={(value) => form.setValue("meal", value)}>
                     <SelectTrigger data-testid="select-meal" className={form.formState.errors.meal ? "border-destructive" : ""}>
-                      <SelectValue placeholder="Select meal type" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Breakfast">Breakfast</SelectItem>
@@ -167,7 +166,6 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                     data-testid="input-amount"
                     type="number"
                     step="0.01"
-                    placeholder="0.00"
                     {...form.register("amount")}
                     className={form.formState.errors.amount ? "border-destructive" : ""}
                   />
@@ -189,7 +187,6 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                 <Input
                   id="representative"
                   data-testid="input-representative"
-                  placeholder="Enter representative name"
                   {...form.register("representative")}
                   className={form.formState.errors.representative ? "border-destructive" : ""}
                 />
