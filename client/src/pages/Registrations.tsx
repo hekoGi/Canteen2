@@ -1,5 +1,9 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { Check, X } from "lucide-react";
 import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
 
 // Mock data for initial development
@@ -40,6 +44,14 @@ const mockRegistrations = [
 ];
 
 export default function Registrations() {
+  const [registrations, setRegistrations] = useState(mockRegistrations);
+
+  const toggleInvoiceShipped = (id: number) => {
+    setRegistrations(prev => prev.map(reg => 
+      reg.id === id ? { ...reg, invoiceShipped: !reg.invoiceShipped } : reg
+    ));
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <main className="relative py-8">
@@ -63,7 +75,7 @@ export default function Registrations() {
             <CardContent>
               <div className="mb-4 flex justify-between items-center">
                 <p className="text-[#fafbfc]">
-                  Samlað skrásetingar / Total Registrations: <strong>{mockRegistrations.length}</strong>
+                  Samlað skrásetingar / Total Registrations: <strong>{registrations.length}</strong>
                 </p>
                 <Badge variant="outline" className="text-sm">
                   Seinast dagført / Last Updated: {new Date().toLocaleDateString()}
@@ -92,10 +104,13 @@ export default function Registrations() {
                       <th className="text-left py-3 px-4 font-medium">
                         Dagur / Date
                       </th>
+                      <th className="text-center py-3 px-4 font-medium">
+                        Rekning sendt / Invoice Shipped
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {mockRegistrations.map((registration) => (
+                    {registrations.map((registration) => (
                       <tr 
                         key={registration.id} 
                         className="border-b border-border/50 hover:bg-muted/30"
@@ -124,13 +139,35 @@ export default function Registrations() {
                             {registration.time}
                           </div>
                         </td>
+                        <td className="py-3 px-4 text-center">
+                          <div className="flex items-center justify-center space-x-2">
+                            <Switch
+                              checked={registration.invoiceShipped}
+                              onCheckedChange={() => toggleInvoiceShipped(registration.id)}
+                              data-testid={`switch-invoice-${registration.id}`}
+                            />
+                            <span className="text-xs">
+                              {registration.invoiceShipped ? (
+                                <Badge variant="default" className="bg-green-600 text-white">
+                                  <Check className="w-3 h-3 mr-1" />
+                                  Sent / Sendt
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline" className="text-muted-foreground">
+                                  <X className="w-3 h-3 mr-1" />
+                                  Pending / Áventandi
+                                </Badge>
+                              )}
+                            </span>
+                          </div>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
 
-              {mockRegistrations.length === 0 && (
+              {registrations.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
                   <p>Ongar skrásetingar enn / No registrations yet</p>
                 </div>
