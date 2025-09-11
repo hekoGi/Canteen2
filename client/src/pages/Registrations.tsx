@@ -51,9 +51,16 @@ export default function Registrations() {
                 <p className="text-[#fafbfc]">
                   Samlað skrásetingar / Total Registrations: <strong>{registrations.length}</strong>
                 </p>
-                <Badge variant="outline" className="text-sm">
-                  Seinast dagført / Last Updated: {new Date().toLocaleDateString()}
-                </Badge>
+                <div className="flex items-center gap-3">
+                  <Link href="/invoiced">
+                    <Button variant="outline" size="sm" data-testid="button-view-invoiced">
+                      Síggj rekning sendt / View Invoiced
+                    </Button>
+                  </Link>
+                  <Badge variant="outline" className="text-sm">
+                    Seinast dagført / Last Updated: {new Date().toLocaleDateString()}
+                  </Badge>
+                </div>
               </div>
 
               <div className="overflow-x-auto">
