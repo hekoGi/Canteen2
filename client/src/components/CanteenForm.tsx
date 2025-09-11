@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, CheckCircle, DollarSign, User, Building } from "lucide-react";
 import { z } from "zod";
-import bakkafrostLogo from "@assets/Bakkafrost_Logo_1757593646977.png";
+import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
