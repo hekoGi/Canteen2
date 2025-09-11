@@ -83,7 +83,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                 <h3 className="font-medium text-foreground">Personal Information</h3>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-sm font-medium">
                     Full Name <span className="text-destructive">*</span>
@@ -134,7 +134,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                 <h3 className="font-medium text-foreground">Meal Details</h3>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="meal" className="text-sm font-medium">
                     Meal Type <span className="text-destructive">*</span>

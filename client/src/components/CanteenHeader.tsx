@@ -9,7 +9,7 @@ export default function CanteenHeader() {
             <UtensilsCrossed className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Canteen Registry</h1>
+            <h1 className="text-xl font-semibold text-foreground">Skráseting</h1>
             <p className="text-sm text-muted-foreground">Meal Entry Portal</p>
           </div>
         </div>
