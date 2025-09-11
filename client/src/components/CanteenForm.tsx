@@ -62,11 +62,17 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
           </div>
         </div>
       )}
-
       <Card>
-        <CardHeader className="text-center pb-6">
-          <CardTitle className="flex items-center justify-center space-x-2 text-8xl">
-            <span>Skráseting / Registration</span>
+        <CardHeader className="text-center pb-6 relative">
+          <div className="absolute top-0 right-0">
+            <img 
+              src="/bakkafrost-logo.png" 
+              alt="Bakkafrost Logo" 
+              className="h-16 w-auto"
+            />
+          </div>
+          <CardTitle className="flex items-center justify-center space-x-2 text-2xl">
+            <span className="text-[46px]">Skráseting / Registration</span>
           </CardTitle>
         </CardHeader>
         
@@ -189,7 +195,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                 type="submit"
                 disabled={isSubmitting}
                 data-testid="button-submit"
-                className="min-w-[120px]"
+                className="min-w-[120px] bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>
