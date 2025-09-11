@@ -22,7 +22,7 @@ export default function Registrations() {
             <Link href="/registrations" className="px-3 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground">
               Skrásetingar / Registrations
             </Link>
-            <Link href="/invoiced" className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover-elevate">
+            <Link href="/invoiced" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-foreground hover-elevate">
               Rekning sendt / Invoiced
             </Link>
           </div>

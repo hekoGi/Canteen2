@@ -18,7 +18,7 @@ export default function Invoiced() {
       <nav className="bg-card border-b border-border">
         <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex space-x-4">
-            <Link href="/registrations" className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover-elevate">
+            <Link href="/registrations" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-foreground hover-elevate">
               Skrásetingar / Registrations
             </Link>
             <Link href="/invoiced" className="px-3 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground">
