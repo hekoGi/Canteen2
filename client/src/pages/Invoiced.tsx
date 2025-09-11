@@ -78,7 +78,7 @@ export default function Invoiced() {
                         Dagur / Date
                       </th>
                       <th className="text-center py-3 px-4 font-medium">
-                        Gerð / Action
+                        Fakturerað / Invoiced
                       </th>
                     </tr>
                   </thead>
@@ -125,7 +125,7 @@ export default function Invoiced() {
                               data-testid={`button-move-back-${person.id}`}
                             >
                               <ArrowLeft className="w-3 h-3 mr-1" />
-                              Move Back / Flyt aftur
+                              Undo / Angra
                             </Button>
                           </div>
                         </td>
