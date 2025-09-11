@@ -127,19 +127,6 @@ export default function Registrations() {
                               onCheckedChange={() => handleInvoiceClick(registration.id)}
                               data-testid={`switch-invoice-${registration.id}`}
                             />
-                            <span className="text-xs">
-                              {registration.invoiceShipped ? (
-                                <Badge variant="default" className="bg-green-600 text-white">
-                                  <Check className="w-3 h-3 mr-1" />
-                                  Sent / Sendt
-                                </Badge>
-                              ) : (
-                                <Badge variant="outline" className="text-muted-foreground">
-                                  <X className="w-3 h-3 mr-1" />
-                                  Pending / Áventandi
-                                </Badge>
-                              )}
-                            </span>
                           </div>
                         </td>
                       </tr>

@@ -114,10 +114,6 @@ export default function Invoiced() {
                         </td>
                         <td className="py-3 px-4 text-center">
                           <div className="flex items-center justify-center space-x-2">
-                            <Badge variant="default" className="bg-green-600 text-white">
-                              <Check className="w-3 h-3 mr-1" />
-                              Invoiced / Rekning sendt
-                            </Badge>
                             <Button
                               size="sm"
                               variant="outline"
