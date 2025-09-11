@@ -127,7 +127,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                 </Label>
                 <Select onValueChange={(value) => form.setValue("meal", value)} defaultValue="Døgurða / Lunch">
                   <SelectTrigger data-testid="select-meal" className={form.formState.errors.meal ? "border-destructive" : ""}>
-                    <SelectValue />
+                    <SelectValue placeholder="Døgurða / Lunch" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Døgurða / Lunch">Døgurða / Lunch</SelectItem>
