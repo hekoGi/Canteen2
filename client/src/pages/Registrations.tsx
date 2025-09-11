@@ -109,7 +109,7 @@ export default function Registrations() {
                             {registration.meal}
                           </Badge>
                         </td>
-                        <td className="py-3 px-4 text-right font-mono">
+                        <td className="py-3 px-4 font-mono text-center">
                           {registration.amount}
                         </td>
                         <td className="py-3 px-4 text-[#fafafc]">
