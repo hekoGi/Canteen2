@@ -112,7 +112,7 @@ export default function Registrations() {
                         <td className="py-3 px-4 font-mono text-center">
                           {registration.amount}
                         </td>
-                        <td className="py-3 px-4 text-[#fafafc]">
+                        <td className="py-3 px-4 text-[#fafafc] text-center">
                           {registration.representative}
                         </td>
                         <td className="py-3 px-4 text-sm">
