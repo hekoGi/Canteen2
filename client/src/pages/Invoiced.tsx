@@ -1,17 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { Check, X } from "lucide-react";
-import { Link } from "wouter";
+import { ArrowLeft, Check } from "lucide-react";
 import { useData } from "@/contexts/DataContext";
 import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
 
-export default function Registrations() {
-  const { registrations, moveToInvoiced } = useData();
+export default function Invoiced() {
+  const { invoicedPersons, moveBackToRegistrations } = useData();
 
-  const handleInvoiceClick = (id: number) => {
-    moveToInvoiced(id);
+  const handleMoveBack = (id: number) => {
+    moveBackToRegistrations(id);
   };
 
   return (
@@ -19,10 +17,10 @@ export default function Registrations() {
       <nav className="bg-card border-b border-border">
         <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex space-x-4">
-            <Link href="/registrations" className="px-3 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground">
+            <Link href="/registrations" className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover-elevate">
               Skrásetingar / Registrations
             </Link>
-            <Link href="/invoiced" className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover-elevate">
+            <Link href="/invoiced" className="px-3 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground">
               Rekning sendt / Invoiced
             </Link>
           </div>
@@ -42,14 +40,14 @@ export default function Registrations() {
           <Card>
             <CardHeader className="text-center pb-6">
               <CardTitle className="text-2xl">
-                <span className="text-[46px]">Yvurlit / Overview</span>
+                <span className="text-[46px]">Rekning sendt / Invoiced</span>
               </CardTitle>
             </CardHeader>
             
             <CardContent>
               <div className="mb-4 flex justify-between items-center">
                 <p className="text-[#fafbfc]">
-                  Samlað skrásetingar / Total Registrations: <strong>{registrations.length}</strong>
+                  Samlað rekning sendt / Total Invoiced: <strong>{invoicedPersons.length}</strong>
                 </p>
                 <Badge variant="outline" className="text-sm">
                   Seinast dagført / Last Updated: {new Date().toLocaleDateString()}
@@ -79,60 +77,55 @@ export default function Registrations() {
                         Dagur / Date
                       </th>
                       <th className="text-center py-3 px-4 font-medium">
-                        Rekning sendt / Invoice Shipped
+                        Gerð / Action
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {registrations.map((registration) => (
+                    {invoicedPersons.map((person) => (
                       <tr 
-                        key={registration.id} 
+                        key={person.id} 
                         className="border-b border-border/50 hover:bg-muted/30"
-                        data-testid={`row-registration-${registration.id}`}
+                        data-testid={`row-invoiced-${person.id}`}
                       >
                         <td className="py-3 px-4 font-medium text-center">
-                          {registration.name}
+                          {person.name}
                         </td>
                         <td className="py-3 px-4 text-center">
-                          {registration.company}
+                          {person.company}
                         </td>
                         <td className="py-3 px-4 text-center">
                           <Badge className="whitespace-nowrap inline-flex items-center rounded-md border px-2.5 py-0.5 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover-elevate border-transparent text-secondary-foreground text-xs bg-[#0f141900] text-center">
-                            {registration.meal}
+                            {person.meal}
                           </Badge>
                         </td>
                         <td className="py-3 px-4 font-mono text-center">
-                          {registration.amount}
+                          {person.amount}
                         </td>
                         <td className="py-3 px-4 text-[#fafafc] text-center">
-                          {registration.representative}
+                          {person.representative}
                         </td>
                         <td className="py-3 px-4 text-sm">
-                          <div>{registration.date}</div>
+                          <div>{person.date}</div>
                           <div className="text-xs text-[#ffffff]">
-                            {registration.time}
+                            {person.time}
                           </div>
                         </td>
                         <td className="py-3 px-4 text-center">
                           <div className="flex items-center justify-center space-x-2">
-                            <Switch
-                              checked={registration.invoiceShipped}
-                              onCheckedChange={() => handleInvoiceClick(registration.id)}
-                              data-testid={`switch-invoice-${registration.id}`}
-                            />
-                            <span className="text-xs">
-                              {registration.invoiceShipped ? (
-                                <Badge variant="default" className="bg-green-600 text-white">
-                                  <Check className="w-3 h-3 mr-1" />
-                                  Sent / Sendt
-                                </Badge>
-                              ) : (
-                                <Badge variant="outline" className="text-muted-foreground">
-                                  <X className="w-3 h-3 mr-1" />
-                                  Pending / Áventandi
-                                </Badge>
-                              )}
-                            </span>
+                            <Badge variant="default" className="bg-green-600 text-white">
+                              <Check className="w-3 h-3 mr-1" />
+                              Invoiced / Rekning sendt
+                            </Badge>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleMoveBack(person.id)}
+                              data-testid={`button-move-back-${person.id}`}
+                            >
+                              <ArrowLeft className="w-3 h-3 mr-1" />
+                              Move Back / Flyt aftur
+                            </Button>
                           </div>
                         </td>
                       </tr>
@@ -141,9 +134,9 @@ export default function Registrations() {
                 </table>
               </div>
 
-              {registrations.length === 0 && (
+              {invoicedPersons.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
-                  <p>Ongar skrásetingar enn / No registrations yet</p>
+                  <p>Ongar rekning sendt enn / No invoiced persons yet</p>
                 </div>
               )}
             </CardContent>
