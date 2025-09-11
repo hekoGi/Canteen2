@@ -53,7 +53,15 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-2xl mx-auto p-6 relative">
+      <div className="absolute top-0 right-0">
+        <img 
+          src={bakkafrostLogo} 
+          alt="Bakkafrost Logo" 
+          className="h-16 w-auto"
+          data-testid="img-bakkafrost-logo"
+        />
+      </div>
       {submitSuccess && (
         <div className="mb-6 p-4 bg-chart-2/10 border border-chart-2/20 rounded-md flex items-center space-x-3" data-testid="status-success">
           <CheckCircle className="w-5 h-5 text-chart-2" />
@@ -64,15 +72,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
         </div>
       )}
       <Card>
-        <CardHeader className="text-center pb-6 relative">
-          <div className="absolute top-4 right-4">
-            <img 
-              src={bakkafrostLogo} 
-              alt="Bakkafrost Logo" 
-              className="h-16 w-auto"
-              data-testid="img-bakkafrost-logo"
-            />
-          </div>
+        <CardHeader className="text-center pb-6">
           <CardTitle className="flex items-center justify-center space-x-2 text-2xl">
             <span className="text-[46px]">Skráseting / Registration</span>
           </CardTitle>
