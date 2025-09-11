@@ -65,12 +65,9 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
 
       <Card>
         <CardHeader className="text-center pb-6">
-          <CardTitle className="flex items-center justify-center space-x-2">
+          <CardTitle className="flex items-center justify-center space-x-2 text-4xl">
             <span>Skráseting</span>
           </CardTitle>
-          <CardDescription className="text-white">
-            Registration for breakfast/lunch
-          </CardDescription>
         </CardHeader>
         
         <CardContent className="space-y-6">
