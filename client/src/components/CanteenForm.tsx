@@ -85,7 +85,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-sm font-medium">
-                    Full Name <span className="text-destructive">*</span>
+                    Navn / Name <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="name"
@@ -102,7 +102,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                 
                 <div className="space-y-2">
                   <Label htmlFor="company" className="text-sm font-medium">
-                    Company <span className="text-destructive">*</span>
+                    Fyritøka / Company <span className="text-destructive">*</span>
                   </Label>
                   <Select onValueChange={(value) => form.setValue("company", value)}>
                     <SelectTrigger data-testid="select-company" className={form.formState.errors.company ? "border-destructive" : ""}>
@@ -135,7 +135,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="meal" className="text-sm font-medium">
-                    Meal Type <span className="text-destructive">*</span>
+                    Máltíð / Meal <span className="text-destructive">*</span>
                   </Label>
                   <Select onValueChange={(value) => form.setValue("meal", value)}>
                     <SelectTrigger data-testid="select-meal" className={form.formState.errors.meal ? "border-destructive" : ""}>
@@ -158,7 +158,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                 
                 <div className="space-y-2">
                   <Label htmlFor="amount" className="text-sm font-medium">
-                    Amount ($) <span className="text-destructive">*</span>
+                    Mongd / Amount <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="amount"
@@ -181,7 +181,7 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="representative" className="text-sm font-medium">
-                  Representative <span className="text-destructive">*</span>
+                  Umboð / Representative <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="representative"
