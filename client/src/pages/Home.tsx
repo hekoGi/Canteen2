@@ -36,14 +36,6 @@ export default function Home() {
           isSubmitting={isSubmitting} 
         />
       </main>
-      
-      <footer className="border-t border-border bg-card py-4 mt-12">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            Canteen Registry System - Professional meal tracking for your organization
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
