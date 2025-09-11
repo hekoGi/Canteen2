@@ -68,54 +68,47 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
           <CardTitle className="flex items-center justify-center space-x-2">
             <span>Skráseting</span>
           </CardTitle>
-          <CardDescription>
-            Please fill out all fields to record a meal entry in the canteen registry
+          <CardDescription className="text-white">
+            Registration for breakfast/lunch
           </CardDescription>
         </CardHeader>
         
         <CardContent className="space-y-6">
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-            {/* Personal Information Section */}
+            {/* Name and Company Fields */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-2 pb-2 border-b border-border">
-                <User className="w-4 h-4 text-muted-foreground" />
-                <h3 className="font-medium text-foreground">Personal Information</h3>
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm font-medium">
+                  Navn / Name <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="name"
+                  data-testid="input-name"
+                  {...form.register("name")}
+                  className={form.formState.errors.name ? "border-destructive" : ""}
+                />
+                {form.formState.errors.name && (
+                  <p className="text-sm text-destructive" data-testid="error-name">
+                    {form.formState.errors.name.message}
+                  </p>
+                )}
               </div>
               
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-sm font-medium">
-                    Navn / Name <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="name"
-                    data-testid="input-name"
-                    {...form.register("name")}
-                    className={form.formState.errors.name ? "border-destructive" : ""}
-                  />
-                  {form.formState.errors.name && (
-                    <p className="text-sm text-destructive" data-testid="error-name">
-                      {form.formState.errors.name.message}
-                    </p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="company" className="text-sm font-medium">
-                    Fyritøka / Company <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="company"
-                    data-testid="input-company"
-                    {...form.register("company")}
-                    className={form.formState.errors.company ? "border-destructive" : ""}
-                  />
-                  {form.formState.errors.company && (
-                    <p className="text-sm text-destructive" data-testid="error-company">
-                      {form.formState.errors.company.message}
-                    </p>
-                  )}
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="company" className="text-sm font-medium">
+                  Fyritøka / Company <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="company"
+                  data-testid="input-company"
+                  {...form.register("company")}
+                  className={form.formState.errors.company ? "border-destructive" : ""}
+                />
+                {form.formState.errors.company && (
+                  <p className="text-sm text-destructive" data-testid="error-company">
+                    {form.formState.errors.company.message}
+                  </p>
+                )}
               </div>
             </div>
 
