@@ -13,7 +13,7 @@ const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   company: z.string().min(1, "Company is required"),
   meal: z.string().min(1, "Please select a meal"),
-  amount: z.string().min(1, "Amount is required").refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Please enter a valid amount"),
+  amount: z.string().min(1, "Amount is required").refine((val) => !isNaN(Number(val)) && Number.isInteger(Number(val)) && Number(val) > 0, "Please enter a whole number"),
   representative: z.string().min(1, "Representative is required"),
 });
 
@@ -138,8 +138,8 @@ export default function CanteenForm({ onSubmit, isSubmitting = false }: CanteenF
                   id="amount"
                   data-testid="input-amount"
                   type="number"
-                  step="0.01"
-                  min="0"
+                  step="1"
+                  min="1"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   {...form.register("amount")}

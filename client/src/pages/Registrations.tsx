@@ -9,7 +9,7 @@ const mockRegistrations = [
     name: "Anna Poulsen",
     company: "Bakkafrost",
     meal: "Døgurða / Lunch",
-    amount: "125.50",
+    amount: "125",
     representative: "Maria Hansen",
     date: "2025-09-11",
     time: "12:30"
@@ -19,7 +19,7 @@ const mockRegistrations = [
     name: "Óli Jacobsen", 
     company: "P/F Thor",
     meal: "Morgunmat / Breakfast",
-    amount: "89.00",
+    amount: "89",
     representative: "Jens Mortensen",
     date: "2025-09-11",
     time: "08:45"
@@ -29,7 +29,7 @@ const mockRegistrations = [
     name: "Rannvá Olsen",
     company: "Bakkafrost",
     meal: "Døgurða / Lunch",
-    amount: "134.75",
+    amount: "134",
     representative: "Lars Nielsen",
     date: "2025-09-10",
     time: "13:15"
@@ -71,13 +71,13 @@ export default function Registrations() {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="border-b border-border">
-                      <th className="text-left py-3 px-4 font-medium">
+                      <th className="py-3 px-4 font-medium text-center">
                         Navn / Name
                       </th>
-                      <th className="text-left py-3 px-4 font-medium">
+                      <th className="py-3 px-4 font-medium text-center">
                         Fyritøka / Company
                       </th>
-                      <th className="text-left py-3 px-4 font-medium">
+                      <th className="py-3 px-4 font-medium text-center">
                         Máltíð / Meal
                       </th>
                       <th className="text-right py-3 px-4 font-medium">
@@ -98,10 +98,10 @@ export default function Registrations() {
                         className="border-b border-border/50 hover:bg-muted/30"
                         data-testid={`row-registration-${registration.id}`}
                       >
-                        <td className="py-3 px-4 font-medium">
+                        <td className="py-3 px-4 font-medium text-center">
                           {registration.name}
                         </td>
-                        <td className="py-3 px-4">
+                        <td className="py-3 px-4 text-center">
                           {registration.company}
                         </td>
                         <td className="py-3 px-4">
@@ -117,7 +117,7 @@ export default function Registrations() {
                         </td>
                         <td className="py-3 px-4 text-sm">
                           <div>{registration.date}</div>
-                          <div className="text-xs text-muted-foreground">
+                          <div className="text-xs text-[#ffffff]">
                             {registration.time}
                           </div>
                         </td>
