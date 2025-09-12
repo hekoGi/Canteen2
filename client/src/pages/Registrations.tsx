@@ -41,7 +41,7 @@ export default function Registrations() {
               Skrásetingar / Registrations
             </Link>
             <Link href="/invoiced" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-foreground hover-elevate">
-              Rekning sendt / Invoiced
+              Fakturerað / Invoiced
             </Link>
           </div>
         </div>
@@ -60,7 +60,7 @@ export default function Registrations() {
           <Card>
             <CardHeader className="text-center pb-6">
               <CardTitle className="text-2xl">
-                <span className="text-[46px]">Yvurlit / Overview</span>
+                <span className="text-[46px]">Yvirlit / Overview</span>
               </CardTitle>
             </CardHeader>
             
@@ -70,11 +70,6 @@ export default function Registrations() {
                   Samlað skrásetingar / Total Registrations: <strong>{registrations.length}</strong>
                 </p>
                 <div className="flex items-center gap-3">
-                  <Link href="/invoiced">
-                    <Button variant="outline" size="sm" data-testid="button-view-invoiced">
-                      Síggj rekning sendt / View Invoiced
-                    </Button>
-                  </Link>
                   <Badge variant="outline" className="text-sm">
                     Seinast dagført / Last Updated: {new Date().toLocaleDateString()}
                   </Badge>
@@ -104,7 +99,7 @@ export default function Registrations() {
                         Dagur / Date
                       </th>
                       <th className="text-center py-3 px-4 font-medium">
-                        Rekning sendt / Invoice Shipped
+                        Fakturerað / Invoiced
                       </th>
                     </tr>
                   </thead>

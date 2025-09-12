@@ -22,7 +22,7 @@ export default function Invoiced() {
               Skrásetingar / Registrations
             </Link>
             <Link href="/invoiced" className="px-3 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground">
-              Rekning sendt / Invoiced
+              Fakturerað / Invoiced
             </Link>
           </div>
         </div>
@@ -41,7 +41,7 @@ export default function Invoiced() {
           <Card>
             <CardHeader className="text-center pb-6">
               <CardTitle className="text-2xl">
-                <span className="text-[46px] text-white">Rekning sendt / Invoiced</span>
+                <span className="text-[46px] text-white">Fakturerað / Invoiced</span>
               </CardTitle>
             </CardHeader>
             

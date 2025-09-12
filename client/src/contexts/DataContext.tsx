@@ -63,27 +63,25 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [invoicedPersons, setInvoicedPersons] = useState<RegistrationData[]>([]);
 
   const moveToInvoiced = (id: number) => {
-    setRegistrations(prev => {
-      const idx = prev.findIndex(r => r.id === id);
-      if (idx === -1) return prev;
-      const person = prev[idx];
-      setInvoicedPersons(p => [...p, { ...person, invoiceShipped: true }]);
-      const next = prev.slice();
-      next.splice(idx, 1);
-      return next;
-    });
+    const personToMove = registrations.find(r => r.id === id);
+    if (!personToMove) return;
+    
+    // Remove from registrations
+    setRegistrations(prev => prev.filter(r => r.id !== id));
+    
+    // Add to invoiced with invoiceShipped = true
+    setInvoicedPersons(prev => [...prev, { ...personToMove, invoiceShipped: true }]);
   };
 
   const moveBackToRegistrations = (id: number) => {
-    setInvoicedPersons(prev => {
-      const idx = prev.findIndex(p => p.id === id);
-      if (idx === -1) return prev;
-      const person = prev[idx];
-      setRegistrations(r => [...r, { ...person, invoiceShipped: false }]);
-      const next = prev.slice();
-      next.splice(idx, 1);
-      return next;
-    });
+    const personToMove = invoicedPersons.find(p => p.id === id);
+    if (!personToMove) return;
+    
+    // Remove from invoiced
+    setInvoicedPersons(prev => prev.filter(p => p.id !== id));
+    
+    // Add back to registrations with invoiceShipped = false
+    setRegistrations(prev => [...prev, { ...personToMove, invoiceShipped: false }]);
   };
 
   return (
