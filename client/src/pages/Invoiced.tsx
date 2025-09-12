@@ -48,7 +48,7 @@ export default function Invoiced() {
             <CardContent>
               <div className="mb-4 flex justify-between items-center">
                 <p className="text-[#fafbfc]">
-                  Samlað rekning sendt / Total Invoiced: <strong>{invoicedPersons.length}</strong>
+                  Fakturerað í alt / Total invoiced: <strong>{invoicedPersons.length}</strong>
                 </p>
                 <Badge variant="outline" className="text-sm">
                   Seinast dagført / Last Updated: {new Date().toLocaleDateString()}
@@ -133,7 +133,7 @@ export default function Invoiced() {
 
               {invoicedPersons.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
-                  <p>Ongar rekning sendt enn / No invoiced persons yet</p>
+                  <p>Tómt / empty</p>
                 </div>
               )}
             </CardContent>

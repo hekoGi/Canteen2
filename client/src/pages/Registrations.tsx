@@ -67,7 +67,7 @@ export default function Registrations() {
             <CardContent>
               <div className="mb-4 flex justify-between items-center">
                 <p className="text-[#fafbfc]">
-                  Samlað skrásetingar / Total Registrations: <strong>{registrations.length}</strong>
+                  Skrásetingar í alt / Total registrations: <strong>{registrations.length}</strong>
                 </p>
                 <div className="flex items-center gap-3">
                   <Badge variant="outline" className="text-sm">
