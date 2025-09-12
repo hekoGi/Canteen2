@@ -167,7 +167,7 @@ export default function Registrations() {
         <AlertDialogContent data-testid="dialog-confirm-move">
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Action</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogDescription className="text-sm text-[#ffffff]">
               Are you sure you want to move this row into Fakturerað / Invoiced?
             </AlertDialogDescription>
           </AlertDialogHeader>
