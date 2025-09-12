@@ -2,16 +2,34 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Check, X } from "lucide-react";
 import { Link } from "wouter";
+import { useState } from "react";
 import { useData } from "@/contexts/DataContext";
 import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
 
 export default function Registrations() {
   const { registrations, moveToInvoiced } = useData();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
 
   const handleInvoiceClick = (id: number) => {
-    moveToInvoiced(id);
+    setSelectedPersonId(id);
+    setDialogOpen(true);
+  };
+
+  const confirmMove = () => {
+    if (selectedPersonId !== null) {
+      moveToInvoiced(selectedPersonId);
+    }
+    setDialogOpen(false);
+    setSelectedPersonId(null);
+  };
+
+  const cancelMove = () => {
+    setDialogOpen(false);
+    setSelectedPersonId(null);
   };
 
   return (
@@ -144,6 +162,25 @@ export default function Registrations() {
           </Card>
         </div>
       </main>
+
+      <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <AlertDialogContent data-testid="dialog-confirm-move">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Action</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to move this row into Fakturerað / Invoiced?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={cancelMove} data-testid="button-confirm-no">
+              No
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmMove} data-testid="button-confirm-yes">
+              Yes
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
