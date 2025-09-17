@@ -19,7 +19,7 @@ interface DataContextType {
   moveBackToRegistrations: (id: number) => void;
 }
 
-const DataContext = createContext<DataContextType | undefined>(undefined);
+export const DataContext = createContext<DataContextType | undefined>(undefined);
 
 // Initial mock data
 const initialMockData: RegistrationData[] = [
@@ -58,36 +58,43 @@ const initialMockData: RegistrationData[] = [
   }
 ];
 
+interface DataState {
+  registrations: RegistrationData[];
+  invoicedPersons: RegistrationData[];
+}
+
 export function DataProvider({ children }: { children: ReactNode }) {
-  const [registrations, setRegistrations] = useState<RegistrationData[]>(initialMockData);
-  const [invoicedPersons, setInvoicedPersons] = useState<RegistrationData[]>([]);
+  const [state, setState] = useState<DataState>({
+    registrations: initialMockData,
+    invoicedPersons: []
+  });
 
   const moveToInvoiced = (id: number) => {
-    const personToMove = registrations.find(r => r.id === id);
+    const personToMove = state.registrations.find(r => r.id === id);
     if (!personToMove) return;
     
-    // Remove from registrations
-    setRegistrations(prev => prev.filter(r => r.id !== id));
-    
-    // Add to invoiced with invoiceShipped = true
-    setInvoicedPersons(prev => [...prev, { ...personToMove, invoiceShipped: true }]);
+    // Update both arrays atomically
+    setState(prev => ({
+      registrations: prev.registrations.filter(r => r.id !== id),
+      invoicedPersons: [...prev.invoicedPersons, { ...personToMove, invoiceShipped: true }]
+    }));
   };
 
   const moveBackToRegistrations = (id: number) => {
-    const personToMove = invoicedPersons.find(p => p.id === id);
+    const personToMove = state.invoicedPersons.find(p => p.id === id);
     if (!personToMove) return;
     
-    // Remove from invoiced
-    setInvoicedPersons(prev => prev.filter(p => p.id !== id));
-    
-    // Add back to registrations with invoiceShipped = false
-    setRegistrations(prev => [...prev, { ...personToMove, invoiceShipped: false }]);
+    // Update both arrays atomically
+    setState(prev => ({
+      registrations: [...prev.registrations, { ...personToMove, invoiceShipped: false }],
+      invoicedPersons: prev.invoicedPersons.filter(p => p.id !== id)
+    }));
   };
 
   return (
     <DataContext.Provider value={{
-      registrations,
-      invoicedPersons,
+      registrations: state.registrations,
+      invoicedPersons: state.invoicedPersons,
       moveToInvoiced,
       moveBackToRegistrations
     }}>
@@ -96,10 +103,3 @@ export function DataProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useData() {
-  const context = useContext(DataContext);
-  if (context === undefined) {
-    throw new Error('useData must be used within a DataProvider');
-  }
-  return context;
-}
