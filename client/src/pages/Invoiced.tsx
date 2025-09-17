@@ -14,7 +14,7 @@ export default function Invoiced() {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#eceeff" }}>
+    <div className="min-h-screen bg-background">
       <nav className="bg-card border-b border-border">
         <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex space-x-4">
