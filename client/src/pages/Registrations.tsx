@@ -3,11 +3,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { Check, X, ArrowRight } from "lucide-react";
+import { Check, X, ArrowRight, Download } from "lucide-react";
 import { Link } from "wouter";
 import { useState } from "react";
 import { useData } from "@/hooks/useData";
 import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
+import * as XLSX from 'xlsx';
 
 export default function Registrations() {
   const { registrations, moveToInvoiced } = useData();
@@ -30,6 +31,66 @@ export default function Registrations() {
   const cancelMove = () => {
     setDialogOpen(false);
     setSelectedPersonId(null);
+  };
+
+  const handleExportToExcel = () => {
+    if (registrations.length === 0) return;
+
+    // Get date range from registrations
+    const dates = registrations.map(r => new Date(r.date)).sort((a, b) => a.getTime() - b.getTime());
+    const startDate = dates[0].toLocaleDateString();
+    const endDate = dates[dates.length - 1].toLocaleDateString();
+    const dateRange = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+
+    // Prepare summary data
+    const summaryData = [
+      ['Skrásetingar Yvirlit / Registrations Overview'],
+      [''],
+      ['Total registrations / Skrásetingar í alt:', registrations.length],
+      ['Date range / Dagsetning:', dateRange],
+      ['Export date / Útflutningsdagur:', new Date().toLocaleDateString()],
+      [''],
+      ['Navn / Name', 'Fyritøka / Company', 'Máltíð / Meal', 'Mongd / Amount', 'Umboð / Representative', 'Dagur / Date', 'Tíð / Time']
+    ];
+
+    // Prepare registration data
+    const registrationData = registrations.map(reg => [
+      reg.name,
+      reg.company,
+      reg.meal,
+      reg.amount,
+      reg.representative,
+      reg.date,
+      reg.time
+    ]);
+
+    // Combine summary and data
+    const worksheetData = [...summaryData, ...registrationData];
+
+    // Create workbook and worksheet
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+    // Set column widths
+    worksheet['!cols'] = [
+      { width: 20 }, // Name
+      { width: 20 }, // Company
+      { width: 18 }, // Meal
+      { width: 12 }, // Amount
+      { width: 20 }, // Representative
+      { width: 12 }, // Date
+      { width: 10 }  // Time
+    ];
+
+    // Add worksheet to workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Registrations');
+
+    // Generate filename with current date
+    const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    const filename = `Skrasetingar-Registrations-${currentDate}.xlsx`;
+
+    // Download file
+    XLSX.writeFile(workbook, filename);
   };
 
   return (
@@ -70,6 +131,16 @@ export default function Registrations() {
                   Skrásetingar í alt / Total registrations: <strong>{registrations.length}</strong>
                 </p>
                 <div className="flex items-center gap-3">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleExportToExcel}
+                    disabled={registrations.length === 0}
+                    data-testid="button-export-excel"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Export to Excel
+                  </Button>
                   <Badge variant="outline" className="text-sm">
                     Seinast dagført / Last Updated: {new Date().toLocaleDateString()}
                   </Badge>
