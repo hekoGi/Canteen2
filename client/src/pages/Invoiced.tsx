@@ -68,13 +68,13 @@ export default function Invoiced() {
                       <th className="py-3 px-4 font-medium text-center">
                         Máltíð / Meal
                       </th>
-                      <th className="text-right py-3 px-4 font-medium">
+                      <th className="py-3 px-4 font-medium text-center">
                         Mongd / Amount
                       </th>
-                      <th className="text-left py-3 px-4 font-medium">
+                      <th className="py-3 px-4 font-medium text-center">
                         Umboð / Representative
                       </th>
-                      <th className="text-left py-3 px-4 font-medium">
+                      <th className="py-3 px-4 font-medium text-center">
                         Dagur / Date
                       </th>
                       <th className="text-center py-3 px-4 font-medium">
@@ -106,7 +106,7 @@ export default function Invoiced() {
                         <td className="py-3 px-4 text-[#fafafc] text-center">
                           {person.representative}
                         </td>
-                        <td className="py-3 px-4 text-sm">
+                        <td className="py-3 px-4 text-sm text-center">
                           <div>{person.date}</div>
                           <div className="text-xs text-[#ffffff]">
                             {person.time}
