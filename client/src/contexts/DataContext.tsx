@@ -15,8 +15,8 @@ export interface RegistrationData {
 interface DataContextType {
   registrations: RegistrationData[];
   invoicedPersons: RegistrationData[];
-  moveToInvoiced: (id: number) => void;
-  moveBackToRegistrations: (id: number) => void;
+  moveToInvoiced: (id: number) => Promise<void>;
+  moveBackToRegistrations: (id: number) => Promise<void>;
 }
 
 export const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -69,9 +69,29 @@ export function DataProvider({ children }: { children: ReactNode }) {
     invoicedPersons: []
   });
 
-  const moveToInvoiced = (id: number) => {
+  const moveToInvoiced = async (id: number) => {
     const personToMove = state.registrations.find(r => r.id === id);
     if (!personToMove) return;
+    
+    // Create activity log
+    try {
+      await fetch('/api/logs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'moved_to_invoiced',
+          personName: personToMove.name,
+          company: personToMove.company,
+          amount: personToMove.amount,
+          meal: personToMove.meal,
+          representative: personToMove.representative,
+        }),
+      });
+    } catch (error) {
+      console.error('Failed to create activity log:', error);
+    }
     
     // Update both arrays atomically
     setState(prev => ({
@@ -80,9 +100,29 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  const moveBackToRegistrations = (id: number) => {
+  const moveBackToRegistrations = async (id: number) => {
     const personToMove = state.invoicedPersons.find(p => p.id === id);
     if (!personToMove) return;
+    
+    // Create activity log
+    try {
+      await fetch('/api/logs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'moved_to_registrations',
+          personName: personToMove.name,
+          company: personToMove.company,
+          amount: personToMove.amount,
+          meal: personToMove.meal,
+          representative: personToMove.representative,
+        }),
+      });
+    } catch (error) {
+      console.error('Failed to create activity log:', error);
+    }
     
     // Update both arrays atomically
     setState(prev => ({

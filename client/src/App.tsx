@@ -7,6 +7,7 @@ import { DataProvider } from "@/contexts/DataContext";
 import Home from "@/pages/Home";
 import Registrations from "@/pages/Registrations";
 import Invoiced from "@/pages/Invoiced";
+import Log from "@/pages/Log";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -15,6 +16,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/registrations" component={Registrations} />
       <Route path="/invoiced" component={Invoiced} />
+      <Route path="/log" component={Log} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -104,6 +104,9 @@ export default function Registrations() {
             <Link href="/invoiced" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-foreground hover-elevate">
               Fakturerað / Invoiced
             </Link>
+            <Link href="/log" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-foreground hover-elevate">
+              Log
+            </Link>
           </div>
         </div>
       </nav>

@@ -22,3 +22,23 @@ export const insertCanteenEntrySchema = createInsertSchema(canteenEntries).omit(
 
 export type InsertCanteenEntry = z.infer<typeof insertCanteenEntrySchema>;
 export type CanteenEntry = typeof canteenEntries.$inferSelect;
+
+// Activity log table
+export const activityLogs = pgTable("activity_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  action: text("action").notNull(), // "moved_to_invoiced" or "moved_to_registrations"
+  personName: text("person_name").notNull(),
+  company: text("company").notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  meal: text("meal").notNull(),
+  representative: text("representative").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertActivityLogSchema = createInsertSchema(activityLogs).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertActivityLog = z.infer<typeof insertActivityLogSchema>;
+export type ActivityLog = typeof activityLogs.$inferSelect;
