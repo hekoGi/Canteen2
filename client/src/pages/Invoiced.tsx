@@ -1,16 +1,77 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check, Download } from "lucide-react";
 import { Link } from "wouter";
 import { useData } from "@/hooks/useData";
 import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
+import * as XLSX from 'xlsx';
 
 export default function Invoiced() {
   const { invoicedPersons, moveBackToRegistrations } = useData();
 
   const handleMoveBack = (id: number) => {
     moveBackToRegistrations(id);
+  };
+
+  const handleExportToExcel = () => {
+    if (invoicedPersons.length === 0) return;
+
+    // Get date range from invoiced persons
+    const dates = invoicedPersons.map(p => new Date(p.date)).sort((a, b) => a.getTime() - b.getTime());
+    const startDate = dates[0].toLocaleDateString();
+    const endDate = dates[dates.length - 1].toLocaleDateString();
+    const dateRange = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+
+    // Prepare summary data
+    const summaryData = [
+      ['Fakturerað Yvirlit / Invoiced Overview'],
+      [''],
+      ['Total invoiced / Fakturerað í alt:', invoicedPersons.length],
+      ['Date range / Dagsetning:', dateRange],
+      ['Export date / Útflutningsdagur:', new Date().toLocaleDateString()],
+      [''],
+      ['Navn / Name', 'Fyritøka / Company', 'Máltíð / Meal', 'Mongd / Amount', 'Umboð / Representative', 'Dagur / Date', 'Tíð / Time']
+    ];
+
+    // Prepare invoiced data
+    const invoicedData = invoicedPersons.map(person => [
+      person.name,
+      person.company,
+      person.meal,
+      person.amount,
+      person.representative,
+      person.date,
+      person.time
+    ]);
+
+    // Combine summary and data
+    const worksheetData = [...summaryData, ...invoicedData];
+
+    // Create workbook and worksheet
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+    // Set column widths
+    worksheet['!cols'] = [
+      { width: 20 }, // Name
+      { width: 20 }, // Company
+      { width: 18 }, // Meal
+      { width: 12 }, // Amount
+      { width: 20 }, // Representative
+      { width: 12 }, // Date
+      { width: 10 }  // Time
+    ];
+
+    // Add worksheet to workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Invoiced');
+
+    // Generate filename with current date
+    const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    const filename = `Fakturerað-Invoiced-${currentDate}.xlsx`;
+
+    // Download file
+    XLSX.writeFile(workbook, filename);
   };
 
   return (
@@ -53,9 +114,21 @@ export default function Invoiced() {
                 <p className="text-[#fafbfc]">
                   Fakturerað í alt / Total invoiced: <strong>{invoicedPersons.length}</strong>
                 </p>
-                <Badge variant="outline" className="text-sm">
-                  Seinast dagført / Last Updated: {new Date().toLocaleDateString()}
-                </Badge>
+                <div className="flex items-center gap-3">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleExportToExcel}
+                    disabled={invoicedPersons.length === 0}
+                    data-testid="button-export-excel"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Export to Excel
+                  </Button>
+                  <Badge variant="outline" className="text-sm">
+                    Seinast dagført / Last Updated: {new Date().toLocaleDateString()}
+                  </Badge>
+                </div>
               </div>
 
               <div className="overflow-x-auto">
