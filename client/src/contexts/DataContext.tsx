@@ -1,7 +1,10 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, ReactNode } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { format } from "date-fns";
 
 export interface RegistrationData {
-  id: number;
+  id: string;
   name: string;
   company: string;
   meal: string;
@@ -15,126 +18,112 @@ export interface RegistrationData {
 interface DataContextType {
   registrations: RegistrationData[];
   invoicedPersons: RegistrationData[];
-  moveToInvoiced: (id: number) => Promise<void>;
-  moveBackToRegistrations: (id: number) => Promise<void>;
+  isLoading: boolean;
+  moveToInvoiced: (id: string) => Promise<void>;
+  moveBackToRegistrations: (id: string) => Promise<void>;
 }
 
 export const DataContext = createContext<DataContextType | undefined>(undefined);
 
-// Initial mock data
-const initialMockData: RegistrationData[] = [
-  {
-    id: 1,
-    name: "Anna Poulsen",
-    company: "Bakkafrost",
-    meal: "Døgurða / Lunch",
-    amount: "125",
-    representative: "Maria Hansen",
-    date: "2025-09-11",
-    time: "12:30",
-    invoiceShipped: false
-  },
-  {
-    id: 2,
-    name: "Óli Jacobsen", 
-    company: "P/F Thor",
-    meal: "Morgunmat / Breakfast",
-    amount: "89",
-    representative: "Jens Mortensen",
-    date: "2025-09-11",
-    time: "08:45",
-    invoiceShipped: false
-  },
-  {
-    id: 3,
-    name: "Rannvá Olsen",
-    company: "Bakkafrost",
-    meal: "Døgurða / Lunch",
-    amount: "134",
-    representative: "Lars Nielsen",
-    date: "2025-09-10",
-    time: "13:15",
-    invoiceShipped: false
-  }
-];
-
-interface DataState {
-  registrations: RegistrationData[];
-  invoicedPersons: RegistrationData[];
-}
-
 export function DataProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<DataState>({
-    registrations: initialMockData,
-    invoicedPersons: []
+  const queryClient = useQueryClient();
+
+  // Fetch all canteen entries
+  const { data: entries = [], isLoading } = useQuery<any[]>({
+    queryKey: ['/api/entries'],
   });
 
-  const moveToInvoiced = async (id: number) => {
-    const personToMove = state.registrations.find(r => r.id === id);
-    if (!personToMove) return;
-    
-    // Create activity log
-    try {
-      await fetch('/api/logs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: 'moved_to_invoiced',
-          personName: personToMove.name,
-          company: personToMove.company,
-          amount: personToMove.amount,
-          meal: personToMove.meal,
-          representative: personToMove.representative,
-        }),
-      });
-    } catch (error) {
-      console.error('Failed to create activity log:', error);
-    }
-    
-    // Update both arrays atomically
-    setState(prev => ({
-      registrations: prev.registrations.filter(r => r.id !== id),
-      invoicedPersons: [...prev.invoicedPersons, { ...personToMove, invoiceShipped: true }]
-    }));
+  // Convert database entries to RegistrationData format
+  const formatEntry = (entry: any): RegistrationData => {
+    const createdAt = new Date(entry.createdAt);
+    return {
+      id: entry.id,
+      name: entry.name,
+      company: entry.company,
+      meal: entry.meal,
+      amount: entry.amount,
+      representative: entry.representative,
+      date: format(createdAt, 'yyyy-MM-dd'),
+      time: format(createdAt, 'HH:mm'),
+      invoiceShipped: entry.invoiceShipped,
+    };
   };
 
-  const moveBackToRegistrations = async (id: number) => {
-    const personToMove = state.invoicedPersons.find(p => p.id === id);
+  // Split entries into registrations and invoiced
+  const registrations = entries
+    .filter(entry => !entry.invoiceShipped)
+    .map(formatEntry);
+
+  const invoicedPersons = entries
+    .filter(entry => entry.invoiceShipped)
+    .map(formatEntry);
+
+  // Mutation to update entry
+  const updateEntryMutation = useMutation({
+    mutationFn: async ({ id, invoiceShipped }: { id: string; invoiceShipped: boolean }) => {
+      return apiRequest('PATCH', `/api/entries/${id}`, { invoiceShipped });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/entries'] });
+    },
+  });
+
+  // Mutation to create activity log
+  const createLogMutation = useMutation({
+    mutationFn: async (logData: any) => {
+      return apiRequest('POST', '/api/logs', logData);
+    },
+  });
+
+  const moveToInvoiced = async (id: string) => {
+    const personToMove = entries.find(e => e.id === id);
     if (!personToMove) return;
-    
+
+    // Update the entry
+    await updateEntryMutation.mutateAsync({ id, invoiceShipped: true });
+
     // Create activity log
     try {
-      await fetch('/api/logs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: 'moved_to_registrations',
-          personName: personToMove.name,
-          company: personToMove.company,
-          amount: personToMove.amount,
-          meal: personToMove.meal,
-          representative: personToMove.representative,
-        }),
+      await createLogMutation.mutateAsync({
+        action: 'moved_to_invoiced',
+        personName: personToMove.name,
+        company: personToMove.company,
+        amount: personToMove.amount,
+        meal: personToMove.meal,
+        representative: personToMove.representative,
       });
     } catch (error) {
       console.error('Failed to create activity log:', error);
     }
-    
-    // Update both arrays atomically
-    setState(prev => ({
-      registrations: [...prev.registrations, { ...personToMove, invoiceShipped: false }],
-      invoicedPersons: prev.invoicedPersons.filter(p => p.id !== id)
-    }));
+  };
+
+  const moveBackToRegistrations = async (id: string) => {
+    const personToMove = entries.find(e => e.id === id);
+    if (!personToMove) return;
+
+    // Update the entry
+    await updateEntryMutation.mutateAsync({ id, invoiceShipped: false });
+
+    // Create activity log
+    try {
+      await createLogMutation.mutateAsync({
+        action: 'moved_to_registrations',
+        personName: personToMove.name,
+        company: personToMove.company,
+        amount: personToMove.amount,
+        meal: personToMove.meal,
+        representative: personToMove.representative,
+      });
+    } catch (error) {
+      console.error('Failed to create activity log:', error);
+    }
   };
 
   return (
     <DataContext.Provider value={{
-      registrations: state.registrations,
-      invoicedPersons: state.invoicedPersons,
+      registrations,
+      invoicedPersons,
+      isLoading,
       moveToInvoiced,
       moveBackToRegistrations
     }}>
@@ -143,3 +132,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
   );
 }
 
+export function useData() {
+  const context = useContext(DataContext);
+  if (!context) {
+    throw new Error("useData must be used within a DataProvider");
+  }
+  return context;
+}

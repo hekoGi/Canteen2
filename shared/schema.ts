@@ -20,7 +20,12 @@ export const insertCanteenEntrySchema = createInsertSchema(canteenEntries).omit(
   invoiceShipped: true,
 });
 
+export const updateCanteenEntrySchema = z.object({
+  invoiceShipped: z.boolean(),
+});
+
 export type InsertCanteenEntry = z.infer<typeof insertCanteenEntrySchema>;
+export type UpdateCanteenEntry = z.infer<typeof updateCanteenEntrySchema>;
 export type CanteenEntry = typeof canteenEntries.$inferSelect;
 
 // Activity log table
