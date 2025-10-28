@@ -123,6 +123,7 @@ The project has been updated from Neon (cloud PostgreSQL) to work with local Pos
 2. **Connection Method**: Now uses standard PostgreSQL connection pooling
 3. **Environment Loading**: Added `dotenv` to automatically load `.env` file
 4. **Cross-Platform**: Installed `cross-env` for Windows compatibility
+5. **Windows Server Compatibility**: Removed `reusePort` option which is not supported on Windows
 
 ## Development Commands
 
