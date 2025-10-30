@@ -82,6 +82,10 @@ Preferred communication style: Simple, everyday language.
 ### Authentication System
 - **User Registration**: Public registration with admin approval workflow
 - **Login System**: Session-based authentication with password validation
+- **Default Admin User**: Automatically created on application startup
+  - Username: `admin`
+  - Password: `W5hoSxQFLC#P&o!3fG$s`
+  - Status: Pre-approved with admin privileges
 - **Protected Routes**: /registrations, /invoiced, and /log require authentication and approval
 - **Admin Panel**: User management at /admin for approving users and assigning admin roles
 - **Role-Based Access**: Admin-only endpoints for user management operations

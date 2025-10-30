@@ -10,6 +10,7 @@ import {
   type UpdateCanteenEntry,
   type User,
   type InsertUser,
+  type InsertAdminUser,
   type UpdateUser
 } from "@shared/schema";
 import { desc, eq } from "drizzle-orm";
@@ -31,6 +32,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | null>;
   getUserById(id: string): Promise<User | null>;
   createUser(user: InsertUser): Promise<User>;
+  createAdminUser(user: InsertAdminUser): Promise<User>;
   updateUser(id: string, updates: UpdateUser): Promise<User | null>;
   deleteUser(id: string): Promise<boolean>;
   validatePassword(username: string, password: string): Promise<User | null>;
@@ -82,6 +84,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
+    const hashedPassword = await bcrypt.hash(insertUser.password, 10);
+    const [user] = await db.insert(users).values({
+      ...insertUser,
+      password: hashedPassword,
+    }).returning();
+    return user;
+  }
+
+  async createAdminUser(insertUser: InsertAdminUser): Promise<User> {
     const hashedPassword = await bcrypt.hash(insertUser.password, 10);
     const [user] = await db.insert(users).values({
       ...insertUser,

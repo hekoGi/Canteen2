@@ -3,6 +3,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { storage } from "./storage";
 
 // Validate required environment variables
 if (!process.env.SESSION_SECRET) {
@@ -61,6 +62,37 @@ app.use((req, res, next) => {
   next();
 });
 
+// Initialize default admin user
+async function initializeAdminUser() {
+  try {
+    const adminUsername = "admin";
+    const adminPassword = "W5hoSxQFLC#P&o!3fG$s";
+    
+    const existingAdmin = await storage.getUserByUsername(adminUsername);
+    
+    if (!existingAdmin) {
+      await storage.createAdminUser({
+        username: adminUsername,
+        password: adminPassword,
+        isApproved: true,
+        isAdmin: true,
+      });
+      log("✓ Default admin user created (username: admin)");
+    } else {
+      // Ensure existing admin user is approved and has admin privileges
+      if (!existingAdmin.isApproved || !existingAdmin.isAdmin) {
+        await storage.updateUser(existingAdmin.id, {
+          isApproved: true,
+          isAdmin: true,
+        });
+        log("✓ Admin user status updated");
+      }
+    }
+  } catch (error) {
+    console.error("Failed to initialize admin user:", error);
+  }
+}
+
 (async () => {
   const server = await registerRoutes(app);
 
@@ -71,6 +103,9 @@ app.use((req, res, next) => {
     res.status(status).json({ message });
     throw err;
   });
+
+  // Initialize admin user before starting the server
+  await initializeAdminUser();
 
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route

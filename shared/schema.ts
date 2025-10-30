@@ -65,11 +65,18 @@ export const insertUserSchema = createInsertSchema(users).omit({
   isAdmin: true,
 });
 
+// Schema for creating admin users with explicit approval/admin flags
+export const insertAdminUserSchema = createInsertSchema(users).omit({
+  id: true,
+  createdAt: true,
+});
+
 export const updateUserSchema = z.object({
   isApproved: z.boolean().optional(),
   isAdmin: z.boolean().optional(),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
+export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
 export type UpdateUser = z.infer<typeof updateUserSchema>;
 export type User = typeof users.$inferSelect;
