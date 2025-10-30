@@ -27,10 +27,12 @@ Preferred communication style: Simple, everyday language.
 - **API Design**: RESTful API structure with /api prefix for all endpoints
 
 ### Data Storage
-- **Database**: PostgreSQL with Neon serverless database provider
+- **Database**: PostgreSQL with Neon serverless database provider (or local PostgreSQL for development)
 - **Schema Management**: Drizzle Kit for database migrations and schema management
 - **Schema Design**: 
-  - `canteen_entries` table with fields for name, company, meal type, amount, representative, and timestamps
+  - `canteen_entries` table with fields for name, company, meal type, amount, representative, invoice status, and timestamps
+  - `users` table with username, hashed password, approval status, admin role, and timestamps
+  - `activity_logs` table for tracking meal entry movements between registrations and invoiced
   - UUID primary keys with automatic generation
   - Decimal precision for monetary amounts
 
@@ -73,7 +75,16 @@ Preferred communication style: Simple, everyday language.
 
 ### Session and Security
 - **connect-pg-simple**: PostgreSQL session store for Express
-- **Express Sessions**: Session management middleware
+- **Express Sessions**: Session management middleware with CSRF protection (sameSite: lax)
+- **bcryptjs**: Password hashing for user authentication
+- **Session Regeneration**: Prevents session fixation attacks on login
+
+### Authentication System
+- **User Registration**: Public registration with admin approval workflow
+- **Login System**: Session-based authentication with password validation
+- **Protected Routes**: /registrations, /invoiced, and /log require authentication and approval
+- **Admin Panel**: User management at /admin for approving users and assigning admin roles
+- **Role-Based Access**: Admin-only endpoints for user management operations
 
 ### Utilities
 - **date-fns**: Date manipulation and formatting

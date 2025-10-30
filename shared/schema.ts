@@ -47,3 +47,29 @@ export const insertActivityLogSchema = createInsertSchema(activityLogs).omit({
 
 export type InsertActivityLog = z.infer<typeof insertActivityLogSchema>;
 export type ActivityLog = typeof activityLogs.$inferSelect;
+
+// Users table
+export const users = pgTable("users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  username: text("username").notNull().unique(),
+  password: text("password").notNull(),
+  isApproved: boolean("is_approved").default(false).notNull(),
+  isAdmin: boolean("is_admin").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
+  createdAt: true,
+  isApproved: true,
+  isAdmin: true,
+});
+
+export const updateUserSchema = z.object({
+  isApproved: z.boolean().optional(),
+  isAdmin: z.boolean().optional(),
+});
+
+export type InsertUser = z.infer<typeof insertUserSchema>;
+export type UpdateUser = z.infer<typeof updateUserSchema>;
+export type User = typeof users.$inferSelect;

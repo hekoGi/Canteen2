@@ -3,19 +3,22 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { Check, X, ArrowRight, Download } from "lucide-react";
+import { Check, X, ArrowRight, Download, LogOut, Shield } from "lucide-react";
 import { Link } from "wouter";
 import { useState } from "react";
 import { useData } from "@/hooks/useData";
+import { useAuth } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
 import * as XLSX from 'xlsx';
 
-export default function Registrations() {
+function RegistrationsContent() {
+  const { user, logout } = useAuth();
   const { registrations, moveToInvoiced } = useData();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
+  const [selectedPersonId, setSelectedPersonId] = useState<string | null>(null);
 
-  const handleInvoiceClick = (id: number) => {
+  const handleInvoiceClick = (id: string) => {
     setSelectedPersonId(id);
     setDialogOpen(true);
   };
@@ -261,5 +264,13 @@ export default function Registrations() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+  );
+}
+
+export default function Registrations() {
+  return (
+    <ProtectedRoute>
+      <RegistrationsContent />
+    </ProtectedRoute>
   );
 }

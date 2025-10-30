@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Check, Download } from "lucide-react";
 import { Link } from "wouter";
 import { useData } from "@/hooks/useData";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
 import * as XLSX from 'xlsx';
 
-export default function Invoiced() {
+function InvoicedContent() {
   const { invoicedPersons, moveBackToRegistrations } = useData();
 
-  const handleMoveBack = (id: number) => {
+  const handleMoveBack = (id: string) => {
     moveBackToRegistrations(id);
   };
 
@@ -217,5 +218,13 @@ export default function Invoiced() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function Invoiced() {
+  return (
+    <ProtectedRoute>
+      <InvoicedContent />
+    </ProtectedRoute>
   );
 }

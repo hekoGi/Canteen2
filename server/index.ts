@@ -1,11 +1,35 @@
 import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+
+// Validate required environment variables
+if (!process.env.SESSION_SECRET) {
+  console.warn("WARNING: SESSION_SECRET not set. Using a default value for development only.");
+  console.warn("For production, set SESSION_SECRET environment variable to a random secret.");
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("SESSION_SECRET environment variable is required in production");
+  }
+}
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "dev-secret-change-this-in-production",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    },
+  })
+);
 
 app.use((req, res, next) => {
   const start = Date.now();

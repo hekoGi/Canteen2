@@ -3,9 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { ActivityLog } from "@shared/schema";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
 
-export default function Log() {
+function LogContent() {
   const { data: logs = [], isLoading } = useQuery<ActivityLog[]>({
     queryKey: ['/api/logs'],
   });
@@ -158,5 +159,13 @@ export default function Log() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function Log() {
+  return (
+    <ProtectedRoute>
+      <LogContent />
+    </ProtectedRoute>
   );
 }
