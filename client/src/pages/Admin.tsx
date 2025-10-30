@@ -72,7 +72,7 @@ export default function Admin() {
 
   useEffect(() => {
     if (!authLoading && (!currentUser || !currentUser.isAdmin)) {
-      setLocation("/login");
+      setLocation("/login?redirect=/admin");
     }
   }, [currentUser, authLoading, setLocation]);
 

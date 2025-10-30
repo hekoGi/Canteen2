@@ -25,6 +25,10 @@ export default function Login() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Get redirect parameter from URL
+  const searchParams = new URLSearchParams(window.location.search);
+  const redirectTo = searchParams.get('redirect') || '/registrations';
+
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -41,7 +45,7 @@ export default function Login() {
         title: "Login Successful",
         description: "Welcome back!",
       });
-      setLocation("/registrations");
+      setLocation(redirectTo);
     } catch (error: any) {
       toast({
         title: "Login Failed",
