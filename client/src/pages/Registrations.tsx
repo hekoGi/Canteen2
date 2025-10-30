@@ -4,16 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Check, X, ArrowRight, Download, LogOut, Shield } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { useData } from "@/hooks/useData";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
 import * as XLSX from 'xlsx';
 
 function RegistrationsContent() {
+  const [, setLocation] = useLocation();
   const { user, logout } = useAuth();
+  const { toast } = useToast();
   const { registrations, moveToInvoiced } = useData();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedPersonId, setSelectedPersonId] = useState<string | null>(null);
@@ -34,6 +37,23 @@ function RegistrationsContent() {
   const cancelMove = () => {
     setDialogOpen(false);
     setSelectedPersonId(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast({
+        title: "Logged Out",
+        description: "You have been logged out successfully",
+      });
+      setLocation("/login");
+    } catch (error: any) {
+      toast({
+        title: "Logout Failed",
+        description: error.message || "Failed to logout",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleExportToExcel = () => {
@@ -100,16 +120,33 @@ function RegistrationsContent() {
     <div className="min-h-screen bg-background">
       <nav className="bg-card border-b border-border">
         <div className="max-w-6xl mx-auto px-6 py-3">
-          <div className="flex space-x-4">
-            <Link href="/registrations" className="px-3 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground">
-              Skrásetingar / Registrations
-            </Link>
-            <Link href="/invoiced" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-foreground hover-elevate">
-              Fakturerað / Invoiced
-            </Link>
-            <Link href="/log" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-foreground hover-elevate">
-              Log
-            </Link>
+          <div className="flex items-center justify-between">
+            <div className="flex space-x-4">
+              <Link href="/registrations" className="px-3 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground">
+                Skrásetingar / Registrations
+              </Link>
+              <Link href="/invoiced" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-foreground hover-elevate">
+                Fakturerað / Invoiced
+              </Link>
+              <Link href="/log" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-foreground hover-elevate">
+                Log
+              </Link>
+              {user?.isAdmin && (
+                <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-foreground hover-elevate">
+                  <Shield className="w-4 h-4 inline mr-1" />
+                  Admin
+                </Link>
+              )}
+            </div>
+            <Button 
+              variant="destructive" 
+              size="sm"
+              onClick={handleLogout}
+              data-testid="button-logout"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Log Out
+            </Button>
           </div>
         </div>
       </nav>
