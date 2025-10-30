@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Check, X, Trash2, UserCog } from "lucide-react";
+import { Shield, Check, X, Trash2, UserCog, LogOut } from "lucide-react";
 import bakkafrostLogo from "@assets/Bakkafrost_Logo_NEG_1757593907689.png";
 
 interface User {
@@ -21,7 +21,7 @@ interface User {
 
 export default function Admin() {
   const [, setLocation] = useLocation();
-  const { user: currentUser, isLoading: authLoading } = useAuth();
+  const { user: currentUser, isLoading: authLoading, logout } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -102,6 +102,23 @@ export default function Admin() {
   const handleDelete = (userId: string) => {
     if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
       deleteUserMutation.mutate(userId);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast({
+        title: "Logged Out",
+        description: "You have been logged out successfully",
+      });
+      setLocation("/login");
+    } catch (error: any) {
+      toast({
+        title: "Logout Failed",
+        description: error.message || "Failed to logout",
+        variant: "destructive",
+      });
     }
   };
 
@@ -222,13 +239,21 @@ export default function Admin() {
                 </Table>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-6 flex items-center justify-between gap-4">
                 <Button 
                   variant="outline" 
                   onClick={() => setLocation("/registrations")}
                   data-testid="button-back"
                 >
                   ← Back to Registrations
+                </Button>
+                <Button 
+                  variant="destructive" 
+                  onClick={handleLogout}
+                  data-testid="button-logout"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Log Out / Rita út
                 </Button>
               </div>
             </CardContent>
