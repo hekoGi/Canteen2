@@ -1,9 +1,37 @@
 import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
+import pgSession from "connect-pg-simple";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
+import { pool } from "./db";
+import fs from "fs";
+import path from "path";
+
+const PgStore = pgSession(session);
+
+function log(message: string, source = "express") {
+  const formattedTime = new Date().toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+  console.log(`${formattedTime} [${source}] ${message}`);
+}
+
+function serveStatic(app: any) {
+  const distPath = path.resolve(import.meta.dirname, "public");
+  if (!fs.existsSync(distPath)) {
+    throw new Error(
+      `Could not find the build directory: ${distPath}, make sure to build the client first`,
+    );
+  }
+  app.use(express.static(distPath));
+  app.use("*", (_req: any, res: any) => {
+    res.sendFile(path.resolve(distPath, "index.html"));
+  });
+}
 
 // Validate required environment variables
 if (!process.env.SESSION_SECRET) {
@@ -20,11 +48,16 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(
   session({
+    store: new PgStore({
+      pool,
+      createTableIfMissing: true,
+    }),
     secret: process.env.SESSION_SECRET || "dev-secret-change-this-in-production",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      // Allow insecure cookies in production when running locally in Docker
+      secure: false, // process.env.NODE_ENV === "production",
       httpOnly: true,
       sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
@@ -111,6 +144,7 @@ async function initializeAdminUser() {
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
   if (app.get("env") === "development") {
+    const { setupVite } = await import("./vite");
     await setupVite(app, server);
   } else {
     serveStatic(app);

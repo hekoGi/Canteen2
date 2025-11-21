@@ -224,6 +224,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/entries", requireAuth, async (req, res) => {
     try {
       const entries = await storage.getCanteenEntries();
+      console.log(`[DEBUG] Fetched ${entries.length} entries for user ${req.session.userId}`);
       res.json(entries);
     } catch (error) {
       console.error("Error fetching entries:", error);
@@ -234,8 +235,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // POST /api/entries - create new canteen entry (no auth required - public form)
   app.post("/api/entries", async (req, res) => {
     try {
+      console.log("[DEBUG] Received entry creation request:", req.body);
       const validatedData = insertCanteenEntrySchema.parse(req.body);
       const entry = await storage.createCanteenEntry(validatedData);
+      console.log("[DEBUG] Created entry:", entry);
       res.json(entry);
     } catch (error) {
       console.error("Error creating entry:", error);

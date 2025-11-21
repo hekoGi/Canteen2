@@ -36,8 +36,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     onSuccess: async (data) => {
       // Set the user data immediately to avoid race conditions
       queryClient.setQueryData(['/api/auth/me'], data);
-      // Then invalidate to ensure fresh data
-      await queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+      // Invalidate all queries to refresh protected data
+      await queryClient.invalidateQueries();
     },
   });
 

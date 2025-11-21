@@ -1,12 +1,9 @@
 import express, { type Express } from "express";
 import fs from "fs";
 import path from "path";
-import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
-import viteConfig from "../vite.config";
-import { nanoid } from "nanoid";
-
-const viteLogger = createLogger();
+// Note: Do NOT import dev-only modules (vite, nanoid, vite.config) at top-level.
+// They are dynamically imported inside setupVite to avoid requiring them in production.
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -20,6 +17,14 @@ export function log(message: string, source = "express") {
 }
 
 export async function setupVite(app: Express, server: Server) {
+  // Dynamically import Vite and config only in development
+  const viteConfigPath = "../vite.config";
+  const [{ createServer: createViteServer, createLogger }, { default: viteConfig }] = await Promise.all([
+    import("vite"),
+    import(viteConfigPath),
+  ]);
+
+  const viteLogger = createLogger();
   const serverOptions = {
     middlewareMode: true,
     hmr: { server },
@@ -54,6 +59,8 @@ export async function setupVite(app: Express, server: Server) {
 
       // always reload the index.html file from disk incase it changes
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
+      // Import nanoid dynamically to avoid requiring it in production
+      const { nanoid } = await import("nanoid");
       template = template.replace(
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`,
