@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: app
       POSTGRES_DB: app
     ports:
-      - "5432:5432"          # optional: for connecting from host tools
+      - "55432:5432"          # optional: for connecting from host tools
     volumes:
       - dbdata:/var/lib/postgresql/data
     healthcheck:
@@ -19,7 +19,7 @@ services:
   app:
     build: .
     ports:
-      - "5000:5000"          # maps localhost:5000 -> container:5000
+      - "5100:5000"          # maps localhost:5000 -> container:5000
     environment:
       NODE_ENV: production
       # Your app should read this from process.env.DATABASE_URL
